@@ -20,5 +20,5 @@ const questionSchema: Schema<IQuestionType> = new mongoose.Schema({
     }
 }, {timestamps: true}) 
 
-export const Question: Model<IQuestionType> = mongoose.model<IQuestionType>('Question', questionSchema)
+export const QuestionType: Model<IQuestionType> = mongoose.model<IQuestionType>('Question', questionSchema)
 export type { IQuestionType }
