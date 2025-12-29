@@ -10,20 +10,51 @@ export interface IRequest extends Request {
 
 export const verifyJWT = asyncHandler( async(req: IRequest, res: Response, next: NextFunction) => {
     try {
-        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer", "")
+        // Try to get token from cookies first
+        let token = req.cookies?.accessToken
 
-        if(!token) throw new ApiError(401, "Unauthorized Request")
+        // If not in cookies, try Authorization header (case-insensitive)
+        if(!token) {
+            const authHeader = req.header("Authorization") || req.header("authorization")
+            if(authHeader) {
+                // Handle both "Bearer token" and just "token" formats
+                token = authHeader.startsWith("Bearer ") 
+                    ? authHeader.substring(7).trim() 
+                    : authHeader.trim()
+            }
+        }
+
+        if(!token) {
+            throw new ApiError(401, "Unauthorized Request - No token provided. Please include token in Authorization header as 'Bearer <token>' or send accessToken in cookies.")
+        }
 
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string) as jwt.JwtPayload
 
         const user = await User.findById(decodedToken._id).select("-password -accessToken")
 
-        if(!user) throw new ApiError(401, "Invalid Access Token")
+        if(!user) {
+            throw new ApiError(401, "Invalid Access Token - User not found")
+        }
 
         req.user = user
         next()
         
     } catch (error) {
+        if(error instanceof ApiError) {
+            throw error
+        }
         throw new ApiError(401, (error as Error)?.message || "Invalid access token")
     }
+})
+
+export const verifyAdmin = asyncHandler( async(req: IRequest, res: Response, next: NextFunction) => {
+    if(!req.user) {
+        throw new ApiError(401, "Unauthorized Request")
+    }
+
+    if(req.user.role !== 'admin') {
+        throw new ApiError(403, "Forbidden: Admin access required")
+    }
+
+    next()
 })

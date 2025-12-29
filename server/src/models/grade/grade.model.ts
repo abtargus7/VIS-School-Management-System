@@ -2,18 +2,20 @@ import mongoose, {Schema, Model, Document} from "mongoose"
 
 interface IGrade extends Document {
     grade: String,
-    subjects: [String],
+    subjects: mongoose.Types.ObjectId[],
 }
 
-const gradeSchema = new mongoose.Schema<IGrade>({
+const gradeSchema = new Schema<IGrade>({
     grade: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
-    subjects: {
-        type: [String],
+    subjects: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subject',
         required: true
-    },
+    }],
     
 }, {timestamps: true})
 

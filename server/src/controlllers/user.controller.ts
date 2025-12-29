@@ -25,7 +25,7 @@ const getAccessToken = async (userId: string) => {
 
 // create new user
 const registerUser = asyncHandler( async(req: Request, res: Response) => {
-    const {firstName, lastName, email, password } = req.body
+    const {firstName, lastName, email, password, role } = req.body
 
     if(
         [firstName, lastName, email, password].some((field) => 
@@ -47,6 +47,7 @@ const registerUser = asyncHandler( async(req: Request, res: Response) => {
         lastName: lastName,
         password: password,
         email: email,   
+        role: role
     })
 
     const isCreated = await user.save()
@@ -91,7 +92,7 @@ const loginUser = asyncHandler( async(req: Request, res: Response) => {
     
     const options = {
         httpOnly: true,
-        secure: true
+        secure: false
     }
 
     return res
