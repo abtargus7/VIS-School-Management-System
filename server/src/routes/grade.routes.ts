@@ -8,7 +8,7 @@ const router = Router();
 router.get("/", verifyJWT, verifyAdmin, getAllGrades);
 
 // Route to get grade by ID (Admin only)
-router.get("/:id", verifyJWT, verifyAdmin, getGradeById);
+router.get("/:id", verifyJWT, getGradeById);
 
 // Route to add a new grade (Admin only)
 router.post("/", verifyJWT, verifyAdmin, addGrade);

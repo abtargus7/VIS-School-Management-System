@@ -8,7 +8,7 @@ const router = Router();
 router.post("/", verifyJWT, verifyAdmin, addSubject);
 
 // Route to get all subjects (Admin only - for selecting when creating grade)
-router.get("/", verifyJWT, verifyAdmin, getAllSubjects);
+router.get("/", verifyJWT, getAllSubjects);
 
 export default router;
 
