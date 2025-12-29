@@ -8,7 +8,7 @@ interface IQuestionType extends Document {
     updatedAt: Date
 }
 
-const questionSchema: Schema<IQuestionType> = new mongoose.Schema({
+const questionTypeSchema: Schema<IQuestionType> = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -20,5 +20,5 @@ const questionSchema: Schema<IQuestionType> = new mongoose.Schema({
     }
 }, {timestamps: true}) 
 
-export const QuestionType: Model<IQuestionType> = mongoose.model<IQuestionType>('Question', questionSchema)
+export const QuestionType: Model<IQuestionType> = mongoose.model<IQuestionType>('QuestionType', questionTypeSchema)
 export type { IQuestionType }

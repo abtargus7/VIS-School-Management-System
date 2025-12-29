@@ -9,7 +9,7 @@ interface IQuestion extends Document {
     grade: String,
     subject: String,
     chapter: String,
-    questionTpe: IQuestionType,
+    questionType: IQuestionType,
     description: String,
     createdAt: Date,
     updatedAt: Date
@@ -36,7 +36,7 @@ const questionSchema: Schema<IQuestion> = new mongoose.Schema({
         type: String,
         required: true
     },
-    questionTpe: {
+    questionType: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'QuestionType',
         required: true

@@ -19,11 +19,13 @@ app.use(express.static('public'))
 import userRouter from "./routes/user.routes"
 import subjectRouter from "./routes/subject.routes"
 import gradeRouter from "./routes/grade.routes"
+import questionTypeRouter from "./routes/questionType.routes"
 
 // routes
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/subjects", subjectRouter)
 app.use("/api/v1/grades", gradeRouter)
+app.use("/api/v1/question-types", questionTypeRouter)
 
 
 
