@@ -2,11 +2,10 @@ import { asyncHandler } from "../utils/AsyncHandler";
 import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
 import { Subject } from "../models/subject/subject.model";
-import { IRequest } from "../middlewares/auth.middleware";
-import { Response } from "express";
+import { Request,Response } from "express";
 
 // Add new subject (Admin only)
-const addSubject = asyncHandler( async(req: IRequest, res: Response) => {
+const addSubject = asyncHandler( async(req: Request, res: Response) => {
     const { name, description } = req.body
 
     if(!name || !description) {
@@ -37,7 +36,7 @@ const addSubject = asyncHandler( async(req: IRequest, res: Response) => {
 })
 
 // Get all subjects (for admin to select when creating grade)
-const getAllSubjects = asyncHandler( async(req: IRequest, res: Response) => {
+const getAllSubjects = asyncHandler( async(req: Request, res: Response) => {
     const subjects = await Subject.find({}).sort({ createdAt: -1 })
 
     return res.status(200).json(

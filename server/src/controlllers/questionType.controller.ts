@@ -2,12 +2,11 @@ import { asyncHandler } from "../utils/AsyncHandler";
 import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
 import { QuestionType } from "../models/questions/questionType.model";
-import { IRequest } from "../middlewares/auth.middleware";
-import { Response } from "express";
+import { Request,Response } from "express";
 import mongoose from "mongoose";
 
 // Add new question type (Admin only)
-const addQuestionType = asyncHandler( async(req: IRequest, res: Response) => {
+const addQuestionType = asyncHandler( async(req: Request, res: Response) => {
     const { name, description } = req.body
 
     if(!name || !description) {
@@ -38,7 +37,7 @@ const addQuestionType = asyncHandler( async(req: IRequest, res: Response) => {
 })
 
 // Get all question types (for selecting when creating questions)
-const getAllQuestionTypes = asyncHandler( async(req: IRequest, res: Response) => {
+const getAllQuestionTypes = asyncHandler( async(req: Request, res: Response) => {
     const questionTypes = await QuestionType.find({}).sort({ createdAt: -1 })
 
     return res.status(200).json(
@@ -47,7 +46,7 @@ const getAllQuestionTypes = asyncHandler( async(req: IRequest, res: Response) =>
 })
 
 // Get question type by ID
-const getQuestionTypeById = asyncHandler( async(req: IRequest, res: Response) => {
+const getQuestionTypeById = asyncHandler( async(req: Request, res: Response) => {
     const { id } = req.params
 
     if(!mongoose.Types.ObjectId.isValid(id)) {

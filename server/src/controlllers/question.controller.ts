@@ -6,12 +6,11 @@ import { QuestionType } from "../models/questions/questionType.model";
 import { Grade } from "../models/grade/grade.model";
 import { Subject } from "../models/subject/subject.model";
 import { Chapter } from "../models/chapter/chapter.model";
-import { IRequest } from "../middlewares/auth.middleware";
-import { Response } from "express";
+import {Request, Response } from "express";
 import mongoose from "mongoose";
 
 // Add new question (Authenticated users)
-const addQuestion = asyncHandler(async (req: IRequest, res: Response) => {
+const addQuestion = asyncHandler(async (req: Request, res: Response) => {
     const { question, answer, grade, subject, chapter, questionType, description } = req.body;
 
     // Validate required fields
@@ -56,6 +55,14 @@ const addQuestion = asyncHandler(async (req: IRequest, res: Response) => {
         throw new ApiError(404, "Chapter not found");
     }
 
+    // Check if user created the chapter (or is admin)
+    const isChapterOwner = existingChapter.createdBy.toString() === req.user._id.toString();
+    const isAdmin = req.user.role === 'admin';
+
+    if (!isChapterOwner && !isAdmin) {
+        throw new ApiError(403, "Forbidden: You can only add questions to your own chapters");
+    }
+
     // Check if question type exists
     const existingQuestionType = await QuestionType.findById(questionType);
     if (!existingQuestionType) {
@@ -96,7 +103,7 @@ const addQuestion = asyncHandler(async (req: IRequest, res: Response) => {
 });
 
 // Update question (Owner or Admin only)
-const updateQuestion = asyncHandler(async (req: IRequest, res: Response) => {
+const updateQuestion = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
     const { question, answer, grade, subject, chapter, questionType, description } = req.body;
 
@@ -179,6 +186,13 @@ const updateQuestion = asyncHandler(async (req: IRequest, res: Response) => {
         if (!existingChapter) {
             throw new ApiError(404, "Chapter not found");
         }
+        // Check if user created the chapter (or is admin)
+        const isChapterOwner = existingChapter.createdBy.toString() === req.user._id.toString();
+        const isAdmin = req.user.role === 'admin';
+
+        if (!isChapterOwner && !isAdmin) {
+            throw new ApiError(403, "Forbidden: You can only move questions to your own chapters");
+        }
         updateData.chapter = chapter;
     }
 
@@ -214,7 +228,7 @@ const updateQuestion = asyncHandler(async (req: IRequest, res: Response) => {
 });
 
 // Delete question (Owner or Admin only)
-const deleteQuestion = asyncHandler(async (req: IRequest, res: Response) => {
+const deleteQuestion = asyncHandler(async (req: Request, res: Response) => {
     const { id } = req.params;
 
     // Validate question ID

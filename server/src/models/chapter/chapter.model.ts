@@ -1,10 +1,14 @@
 import mongoose, {Schema, Model, Document} from "mongoose"
+import { IUser } from '../user/user.model'
 
 interface IChapter extends Document {
     grade: String,
     subject: String,
     chapterName: String,
-    bookName?: String
+    bookName?: String,
+    createdBy: IUser,
+    createdAt: Date,
+    updatedAt: Date
 }
 
 const chapterSchema: Schema<IChapter> = new mongoose.Schema({
@@ -22,6 +26,11 @@ const chapterSchema: Schema<IChapter> = new mongoose.Schema({
     },
     bookName: {
         type: String,
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 }, {timestamps: true})
 

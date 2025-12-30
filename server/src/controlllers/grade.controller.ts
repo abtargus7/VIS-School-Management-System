@@ -2,13 +2,12 @@ import { asyncHandler } from "../utils/AsyncHandler";
 import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
 import { Grade } from "../models/grade/grade.model";
-import { Subject } from "../models/subject/subject.model";
-import { IRequest } from "../middlewares/auth.middleware";
-import { Response } from "express";
+import { Subject } from "../models/subject/subject.model";      
+import { Request,Response } from "express";
 import mongoose from "mongoose";
 
 // Add new grade (Admin only)
-const addGrade = asyncHandler( async(req: IRequest, res: Response) => {
+const addGrade = asyncHandler( async(req: Request, res: Response) => {
     const { grade, subjects } = req.body
 
     if(!grade || !subjects) {
@@ -63,7 +62,7 @@ const addGrade = asyncHandler( async(req: IRequest, res: Response) => {
 })
 
 // Get all grades
-const getAllGrades = asyncHandler( async(req: IRequest, res: Response) => {
+const getAllGrades = asyncHandler( async(req: Request, res: Response) => {
     const grades = await Grade.find({}).populate('subjects').sort({ createdAt: -1 })
 
     return res.status(200).json(
@@ -72,7 +71,7 @@ const getAllGrades = asyncHandler( async(req: IRequest, res: Response) => {
 })
 
 // Get grade by ID
-const getGradeById = asyncHandler( async(req: IRequest, res: Response) => {
+const getGradeById = asyncHandler( async(req: Request, res: Response) => {
     const { id } = req.params
 
     if(!mongoose.Types.ObjectId.isValid(id)) {
