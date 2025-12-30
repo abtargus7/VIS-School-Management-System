@@ -1,16 +1,20 @@
 import mongoose, { Schema, Model, Document} from 'mongoose'
 import { IQuestionType } from './questionType.model'
-import { QuestionType } from './questionType.model'
+import { IGrade } from '../grade/grade.model'
+import { ISubject } from '../subject/subject.model'
+import { IChapter } from '../chapter/chapter.model'
+import { IUser } from '../user/user.model'
 
 interface IQuestion extends Document {
     _id: String,
     question: String,
     answer?: String
-    grade: String,
-    subject: String,
-    chapter: String,
+    grade: IGrade,
+    subject: ISubject,
+    chapter: IChapter,
     questionType: IQuestionType,
     description: String,
+    createdBy: IUser,
     createdAt: Date,
     updatedAt: Date
 }
@@ -25,15 +29,18 @@ const questionSchema: Schema<IQuestion> = new mongoose.Schema({
         type: String,
     },
     grade: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Grade',
         required: true
     },
     subject: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Subject',
         required: true
     },
     chapter: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Chapter',
         required: true
     },
     questionType: {
@@ -43,6 +50,11 @@ const questionSchema: Schema<IQuestion> = new mongoose.Schema({
     },
     description: {
         type: String,
+        required: true
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     }
 }, {timestamps: true}) 
