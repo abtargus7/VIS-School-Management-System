@@ -22,6 +22,7 @@ import gradeRouter from "./routes/grade.routes"
 import questionTypeRouter from "./routes/questionType.routes"
 import questionRouter from "./routes/question.routes"
 import chapterRouter from "./routes/chapter.routes"
+import authRouter from "./routes/auth.routes"
 
 // routes
 app.use("/api/v1/users", userRouter)
@@ -30,6 +31,7 @@ app.use("/api/v1/grades", gradeRouter)
 app.use("/api/v1/question-types", questionTypeRouter)
 app.use("/api/v1/questions", questionRouter)
 app.use("/api/v1/chapters", chapterRouter)
+app.use("/api/v1/auth", authRouter)
 
 
 

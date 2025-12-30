@@ -4,11 +4,8 @@ import { asyncHandler } from "../utils/AsyncHandler"
 import jwt from 'jsonwebtoken'
 import { NextFunction, Request, Response } from "express"
 
-export interface IRequest extends Request {
-    user?: IUser,
-}
 
-export const verifyJWT = asyncHandler( async(req: IRequest, res: Response, next: NextFunction) => {
+export const verifyJWT = asyncHandler( async(req: Request, res: Response, next: NextFunction) => {
     try {
         // Try to get token from cookies first
         let token = req.cookies?.accessToken
@@ -47,7 +44,7 @@ export const verifyJWT = asyncHandler( async(req: IRequest, res: Response, next:
     }
 })
 
-export const verifyAdmin = asyncHandler( async(req: IRequest, res: Response, next: NextFunction) => {
+export const verifyAdmin = asyncHandler( async(req: Request, res: Response, next: NextFunction) => {
     if(!req.user) {
         throw new ApiError(401, "Unauthorized Request")
     }
