@@ -1,20 +1,21 @@
 import mongoose, { Schema, Model, Document} from 'mongoose'
 import { IQuestionType } from './questionType.model'
-import { IGrade } from '../grade/grade.model'
-import { ISubject } from '../subject/subject.model'
-import { IChapter } from '../chapter/chapter.model'
-import { IUser } from '../user/user.model'
+import { QuestionType } from './questionType.model'
+import { Grade } from '../grade/grade.model'
+import { Subject } from '../subject/subject.model'
+import { Chapter } from '../chapter/chapter.model'
+
+
 
 interface IQuestion extends Document {
     _id: String,
     question: String,
     answer?: String
-    grade: IGrade,
-    subject: ISubject,
-    chapter: IChapter,
+    grade: String,
+    subject: String,
+    chapter: String,
     questionType: IQuestionType,
     description: String,
-    createdBy: IUser,
     createdAt: Date,
     updatedAt: Date
 }
@@ -29,7 +30,7 @@ const questionSchema: Schema<IQuestion> = new mongoose.Schema({
         type: String,
     },
     grade: {
-        type: mongoose.Schema.Types.ObjectId,
+        type:  mongoose.Schema.Types.ObjectId, 
         ref: 'Grade',
         required: true
     },
@@ -50,11 +51,6 @@ const questionSchema: Schema<IQuestion> = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true
-    },
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
         required: true
     }
 }, {timestamps: true}) 
